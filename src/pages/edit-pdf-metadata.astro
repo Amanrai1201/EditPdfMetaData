@@ -1,0 +1,177 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import MetadataEditor from "../components/MetadataEditor.astro";
+import Faq from "../components/Faq.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+import { faqs, faqSchema } from "../data/faqs";
+
+const path = "/edit-pdf-metadata";
+const crumbs = [{ label: "Edit PDF metadata", href: path }];
+
+const pageFaqs = faqs.filter((f) => f.cat === "Using the tool");
+
+const howTo = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to edit PDF metadata in your browser",
+  totalTime: "PT2M",
+  tool: [{ "@type": "HowToTool", name: "A web browser" }],
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Load your PDF",
+      text: "Drag your PDF onto the editor. It is read into your browser's memory and never uploaded.",
+      url: "https://pdfmetadataeditor.com/edit-pdf-metadata#editor",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Change the fields",
+      text: "Edit the title, author, subject, keywords, creator, producer and dates. Clear a field to delete it, or add your own custom properties.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Review your changes",
+      text: "Check the pending-changes list, which shows each field's old and new value.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Download the edited PDF",
+      text: "Save a new copy with your metadata applied. The original file is left untouched.",
+    },
+  ],
+};
+
+const tasks = [
+  {
+    h: "Fix the author on a shared document",
+    p: "Office software stamps whatever account name the machine was set up with. Replace it with your professional name, your organisation, or nothing at all.",
+  },
+  {
+    h: "Give a document a real title",
+    p: "PDF readers show the Title property in the window and tab instead of the filename. Setting it turns invoice-final-v3.pdf into “Invoice 2026-084 — Acme Ltd”.",
+  },
+  {
+    h: "Correct creation and modification dates",
+    p: "Set either date explicitly, or use the Now button to stamp the current time. Clearing a date removes it from the document entirely.",
+  },
+  {
+    h: "Add keywords for search",
+    p: "Comma-separated keywords are indexed by desktop search and document management systems, making files findable when their titles don't match how people search.",
+  },
+  {
+    h: "Track internal properties",
+    p: "Add custom key/value pairs such as Department, CaseNumber, or Version. Existing custom keys in the file are detected and shown automatically.",
+  },
+  {
+    h: "Apply the same metadata to several files",
+    p: "Export one document's metadata as JSON, then import it into the next PDF to reuse the same title, author and keyword set.",
+  },
+];
+---
+
+<Layout
+  title="Edit PDF Metadata Online — Change Title, Author & Dates"
+  description="Edit PDF metadata free in your browser. Change the title, author, subject, keywords, creator, producer and dates, add custom properties, then download a new copy. No uploads, no sign-up."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[howTo, faqSchema(pageFaqs)]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Free tool"
+      title="Edit PDF metadata without re-exporting the document."
+      intro="Correct the author, set a proper title, fix the dates, add keywords, or record your own custom properties — then download a new copy. Your pages, text and layout are left exactly as they were."
+      chips={["All nine standard fields", "Custom properties", "Change review before saving"]}
+      mesh
+    />
+
+    <MetadataEditor showHeader={false} emphasis="download" />
+
+    <!-- Common tasks -->
+    <section class="border-y border-hairline bg-surface py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">Common edits</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            What people usually come here to change.
+          </h2>
+        </div>
+
+        <dl class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            tasks.map((t) => (
+              <div class="card p-6">
+                <dt class="text-body-md font-semibold text-ink">{t.h}</dt>
+                <dd class="mt-2 text-body-sm text-body">{t.p}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- Editing notes -->
+    <section class="py-16 sm:py-24">
+      <div class="container-page">
+        <div class="mx-auto max-w-3xl">
+          <p class="eyebrow">Good to know</p>
+          <h2 class="mt-2 text-display-md text-ink">Three things that trip people up.</h2>
+
+          <div class="mt-10 space-y-8">
+            <div class="border-l-2 border-hairline pl-5">
+              <h3 class="text-display-sm text-ink">An empty field is a deleted field</h3>
+              <p class="mt-2 text-body-md text-body">
+                Clearing an input removes that entry from the document's Info dictionary
+                rather than writing an empty string. That's usually what you want — a
+                property that exists but is blank still tells a reader the field was
+                deliberately emptied.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-hairline pl-5">
+              <h3 class="text-display-sm text-ink">Producer is often rewritten by other tools</h3>
+              <p class="mt-2 text-body-md text-body">
+                Many PDF applications overwrite the Producer field with their own name
+                whenever they save a file. This editor preserves exactly what you type,
+                including an empty value — but if you later re-save the document
+                elsewhere, that software may stamp itself back in.
+              </p>
+            </div>
+
+            <div class="border-l-2 border-hairline pl-5">
+              <h3 class="text-display-sm text-ink">
+                Editing fields is not the same as removing everything
+              </h3>
+              <p class="mt-2 text-body-md text-body">
+                A PDF can hold a second copy of its metadata in an XMP packet. Editing the
+                standard fields doesn't rewrite that packet, so if your goal is a clean
+                document rather than a corrected one, use
+                <a href="/remove-pdf-metadata" class="text-link underline decoration-link/30 underline-offset-4 hover:decoration-link">Remove all metadata</a>
+                instead.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Faq
+      variant="all"
+      only={["Using the tool"]}
+      eyebrow="Questions"
+      title="Editing PDF metadata — questions."
+      moreLink={true}
+    />
+
+    <RelatedPages exclude={[path]} />
+  </main>
+
+  <Footer />
+</Layout>

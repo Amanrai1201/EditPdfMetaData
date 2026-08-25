@@ -1,0 +1,223 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Steps from "../components/Steps.astro";
+import PrivacyBand from "../components/PrivacyBand.astro";
+import CtaBand from "../components/CtaBand.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+
+const path = "/how-it-works";
+const crumbs = [{ label: "How it works", href: path }];
+
+const howTo = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to view, edit and remove PDF metadata in your browser",
+  description:
+    "Load a PDF, review or change its metadata fields, then download a new copy — entirely on your own device, with no upload.",
+  totalTime: "PT2M",
+  tool: [{ "@type": "HowToTool", name: "A web browser" }],
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Drop in your PDF",
+      text: "Drag a file onto the editor or browse for it. The file is read straight into your browser's memory and is never sent anywhere.",
+      url: "https://pdfmetadataeditor.com/edit-pdf-metadata#editor",
+    },
+    {
+      "@type": "HowToStep",
+      name: "View and edit the fields",
+      text: "Every metadata field appears in an editable form. Change what you need, clear a field to delete it, or add your own custom properties.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Download your copy",
+      text: "Save the edited PDF, or strip all metadata in one click. Your original file stays exactly as it was.",
+    },
+  ],
+};
+
+const technical = [
+  {
+    n: "01",
+    h: "The browser reads the file, not a server",
+    p: "Choosing a file gives the page a File handle from the operating system. We call its arrayBuffer() method to get the raw bytes into a JavaScript variable. That is a purely local operation — there is no network call in it, and no endpoint on this site that accepts a document.",
+  },
+  {
+    n: "02",
+    h: "A PDF library parses those bytes in the tab",
+    p: "The bytes are handed to pdf-lib, a JavaScript PDF toolkit that runs inside the page. It walks the file's object graph, locates the trailer's Info dictionary and the catalog's Metadata stream, and hands back plain values the form can display.",
+  },
+  {
+    n: "03",
+    h: "Your edits are written back into the object graph",
+    p: "Saving sets or deletes each Info key directly, and — for a full removal — drops the XMP stream from the document catalog too. The page content streams are never rewritten, so text, fonts, images and layout come through byte-identical.",
+  },
+  {
+    n: "04",
+    h: "The result becomes a download in local memory",
+    p: "The re-serialised bytes are wrapped in a Blob, given a temporary blob: URL, and clicked as a download link. That URL is revoked immediately afterwards. Nothing is persisted, cached, or transmitted.",
+  },
+];
+
+const loadNotes = [
+  {
+    h: "The page is interactive before any PDF code loads",
+    p: "The PDF library is imported dynamically the first time you pick a file, so the initial page load stays small. There is no “loading engine…” wait before you can do anything.",
+  },
+  {
+    h: "No WebAssembly runtime to download",
+    p: "Some browser PDF tools ship a multi-megabyte WASM build of a native PDF engine and boot it before showing you a thing. Metadata doesn't need that much machinery.",
+  },
+  {
+    h: "Everything is cached after the first visit",
+    p: "Once the library is in your browser cache, subsequent files are handled with no further downloads at all — which is why the tool keeps working with your network disconnected.",
+  },
+];
+---
+
+<Layout
+  title="How It Works — Local, In-Browser PDF Metadata Editing"
+  description="How the PDF metadata editor works: your browser reads the file, a JavaScript PDF library parses it in the tab, your edits are written back locally, and the result downloads from memory. No uploads."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[howTo]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="How it works"
+      title="Three steps for you. No server anywhere in the loop."
+      intro="The tool is a static page plus JavaScript. Your PDF is read, parsed, edited and re-saved inside the browser tab you already have open — which is why there is nothing to upload and nothing for us to store."
+      chips={["No upload endpoint", "No account", "Works offline"]}
+    />
+
+    <Steps title="Three steps, zero uploads." eyebrow="The short version" />
+
+    <!-- Technical detail -->
+    <section class="border-y border-hairline bg-surface py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">The longer version</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            What actually happens when you drop in a file.
+          </h2>
+          <p class="mt-4 text-body-lg text-body">
+            Worth reading if “it runs in your browser” sounds like marketing copy. Here is
+            the mechanism, step by step.
+          </p>
+        </div>
+
+        <ol class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {
+            technical.map((t) => (
+              <li class="card p-6">
+                <span class="font-mono text-caption text-mute">{t.n}</span>
+                <h3 class="mt-3 text-body-md font-semibold text-ink">{t.h}</h3>
+                <p class="mt-2 text-body-sm text-body">{t.p}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Why it's fast -->
+    <section class="py-16 sm:py-24">
+      <div class="container-page grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr]">
+        <div>
+          <p class="eyebrow">Performance</p>
+          <h2 class="mt-2 text-display-md text-ink">
+            Why it opens instantly.
+          </h2>
+          <p class="mt-4 text-body-md text-body">
+            Reading and writing metadata is a small job: it touches a dictionary near the
+            end of the file and one optional XML stream. It does not require rendering a
+            single page. Building the tool around that fact keeps it fast.
+          </p>
+        </div>
+
+        <dl class="space-y-6">
+          {
+            loadNotes.map((n) => (
+              <div class="border-l-2 border-hairline pl-5">
+                <dt class="text-body-md font-semibold text-ink">{n.h}</dt>
+                <dd class="mt-2 text-body-sm text-body">{n.p}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- Two metadata stores -->
+    <section class="border-t border-hairline py-16 sm:py-24">
+      <div class="container-page">
+        <div class="mx-auto max-w-3xl">
+          <p class="eyebrow">Under the hood</p>
+          <h2 class="mt-2 text-display-md text-ink">
+            The two places a PDF keeps its metadata.
+          </h2>
+          <p class="mt-4 text-body-md text-body">
+            This is the detail that separates a real cleanup from a cosmetic one. Both
+            stores are handled here.
+          </p>
+
+          <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div class="card p-6">
+              <p class="eyebrow">Store one</p>
+              <h3 class="mt-2 text-display-sm text-ink">Info dictionary</h3>
+              <p class="mt-3 text-body-sm text-body">
+                Key/value entries in the file's trailer — what a PDF reader shows under
+                “Document properties”. Editing writes here; removal deletes every entry.
+              </p>
+              <pre class="mt-4 overflow-x-auto rounded-md border border-hairline bg-surface-2/60 p-3 font-mono text-code text-body"><code>{`/Title (Q3 Report)
+/Author (Jane Doe)
+/Producer (Acme PDF 4.1)`}</code></pre>
+            </div>
+
+            <div class="card p-6">
+              <p class="eyebrow">Store two</p>
+              <h3 class="mt-2 text-display-sm text-ink">XMP packet</h3>
+              <p class="mt-3 text-body-sm text-body">
+                An XML stream referenced from the document catalog, often holding a second
+                copy of the same details. Removal deletes the stream reference outright.
+              </p>
+              <pre class="mt-4 overflow-x-auto rounded-md border border-hairline bg-surface-2/60 p-3 font-mono text-code text-body"><code>{`<dc:creator>
+  <rdf:Seq>
+    <rdf:li>Jane Doe</rdf:li>`}</code></pre>
+            </div>
+          </div>
+
+          <p class="mt-8 text-body-md text-body">
+            The viewer shows you the raw XMP when a file has one, so you can confirm for
+            yourself what a “cleaned” document still contains.
+            <a
+              href="/pdf-metadata-fields"
+              class="text-link underline decoration-link/30 underline-offset-4 hover:decoration-link"
+              >Read the field reference</a
+            > for what each property means.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <PrivacyBand />
+
+    <CtaBand
+      title="See it for yourself."
+      body="Open DevTools, load a PDF, and watch the network stay silent."
+      href="/edit-pdf-metadata"
+      cta="Open the editor"
+    />
+
+    <RelatedPages exclude={[path]} />
+  </main>
+
+  <Footer />
+</Layout>

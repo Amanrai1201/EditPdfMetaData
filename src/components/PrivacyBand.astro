@@ -1,0 +1,72 @@
+---
+interface Props {
+  /** Hide the link when rendered on the privacy page itself. */
+  showPolicyLink?: boolean;
+}
+const { showPolicyLink = true } = Astro.props;
+
+const points = [
+  "No file uploads — parsing and saving happen in local memory.",
+  "No analytics, no tracking pixels, no advertising cookies.",
+  "No account, no email, no daily quota.",
+  "Works with your network disconnected — try it.",
+];
+---
+
+<!-- Polarity-flipped dark band — the brand's depth cue between sections. -->
+<section class="bg-primary py-16 text-on-primary sm:py-24">
+  <div class="container-page">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+      <div>
+        <p class="font-mono text-caption uppercase tracking-widest text-on-primary/50">Privacy</p>
+        <h2 class="mt-2 text-display-md sm:text-display-lg">
+          Your PDF never leaves your device.
+        </h2>
+        <p class="mt-4 text-body-lg text-on-primary/70">
+          This isn't a promise you have to take on faith. There is no server to upload
+          to — the entire tool is static files plus JavaScript that runs in your browser.
+        </p>
+        <ul class="mt-6 space-y-3">
+          {
+            points.map((item) => (
+              <li class="flex gap-3 text-body-md text-on-primary/85">
+                <svg class="mt-0.5 h-5 w-5 shrink-0 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+        {
+          showPolicyLink && (
+            <a
+              href="/privacy"
+              class="mt-8 inline-flex items-center gap-2 text-body-md text-cyan underline decoration-cyan/40 underline-offset-4 hover:decoration-cyan"
+            >
+              Read the full privacy policy
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          )
+        }
+      </div>
+
+      <!-- Verify-it-yourself terminal mockup -->
+      <div class="rounded-md bg-black/40 p-5 ring-1 ring-white/10">
+        <div class="flex items-center gap-1.5 pb-3">
+          <span class="h-2.5 w-2.5 rounded-full bg-white/20"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-white/20"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-white/20"></span>
+          <span class="ml-2 font-mono text-caption text-on-primary/40">verify it yourself</span>
+        </div>
+        <pre class="overflow-x-auto font-mono text-code leading-relaxed text-on-primary/80"><code><span class="text-on-primary/40"># 1. Open your browser's DevTools → Network tab</span>
+<span class="text-on-primary/40"># 2. Load a PDF into the editor</span>
+<span class="text-on-primary/40"># 3. Count the requests that carry your file</span>
+
+<span class="text-cyan">→ 0 requests</span>
+
+<span class="text-on-primary/40"># Or go fully offline and reload:</span>
+<span class="text-on-primary/40"># the editor still works, because the work</span>
+<span class="text-on-primary/40"># was always happening on your machine.</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>

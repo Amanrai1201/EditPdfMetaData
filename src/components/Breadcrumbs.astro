@@ -1,0 +1,28 @@
+---
+interface Props {
+  items: { label: string; href: string }[];
+}
+const { items } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="border-b border-hairline bg-surface-2/40">
+  <div class="container-page">
+    <ol class="flex flex-wrap items-center gap-1.5 py-3 text-caption">
+      <li>
+        <a href="/" class="text-mute transition-colors hover:text-ink">Home</a>
+      </li>
+      {
+        items.map((item, i) => (
+          <li class="flex items-center gap-1.5">
+            <svg class="h-3 w-3 text-hairline-strong" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            {i === items.length - 1 ? (
+              <span class="font-medium text-body" aria-current="page">{item.label}</span>
+            ) : (
+              <a href={item.href} class="text-mute transition-colors hover:text-ink">{item.label}</a>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</nav>

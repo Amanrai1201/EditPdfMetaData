@@ -4,18 +4,46 @@ import Nav from "../components/Nav.astro";
 import Hero from "../components/Hero.astro";
 import MetadataEditor from "../components/MetadataEditor.astro";
 import Features from "../components/Features.astro";
-import HowItWorks from "../components/HowItWorks.astro";
+import Steps from "../components/Steps.astro";
+import PrivacyBand from "../components/PrivacyBand.astro";
 import Faq from "../components/Faq.astro";
 import Footer from "../components/Footer.astro";
+import { homeFaqs, faqSchema } from "../data/faqs";
+
+const appSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "PDF Metadata Editor",
+  url: "https://pdfmetadataeditor.com/",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Any (web browser)",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description:
+    "Free browser-based tool to view, edit, and remove PDF metadata. No uploads, no tracking.",
+  featureList: [
+    "View PDF metadata",
+    "Edit PDF metadata",
+    "Remove all PDF metadata",
+    "Custom metadata properties",
+    "Export and import metadata as JSON",
+    "100% client-side processing",
+  ],
+};
 ---
 
-<Layout>
+<Layout
+  title="PDF Metadata Editor — View, Edit & Remove PDF Metadata Online"
+  description="Free online PDF metadata editor. View, edit, and permanently remove PDF metadata — title, author, subject, keywords, producer and dates — 100% in your browser. No uploads, no tracking, no limits."
+  path="/"
+  schema={[appSchema, faqSchema(homeFaqs)]}
+>
   <Nav />
-  <main>
+  <main id="main">
     <Hero />
     <MetadataEditor />
     <Features />
-    <HowItWorks />
+    <Steps />
+    <PrivacyBand />
     <Faq />
   </main>
   <Footer />

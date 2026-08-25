@@ -1,0 +1,176 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import MetadataEditor from "../components/MetadataEditor.astro";
+import Faq from "../components/Faq.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+import { faqs, faqSchema } from "../data/faqs";
+import { metaFields } from "../data/fields";
+
+const path = "/view-pdf-metadata";
+const crumbs = [{ label: "View PDF metadata", href: path }];
+
+const pageFaqs = faqs.filter((f) => f.cat === "Basics" || f.cat === "Troubleshooting");
+
+const howTo = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to view PDF metadata in your browser",
+  totalTime: "PT1M",
+  tool: [{ "@type": "HowToTool", name: "A web browser" }],
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Open the viewer",
+      text: "Open the PDF metadata viewer. Nothing is uploaded — the tool runs in your browser.",
+      url: "https://pdfmetadataeditor.com/view-pdf-metadata#editor",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Select your PDF",
+      text: "Drag a PDF onto the drop area or browse for it on your device.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Read the properties",
+      text: "Every document property appears immediately, along with page count, file size, PDF version, encryption status and any XMP packet.",
+    },
+  ],
+};
+
+const viewerShows = [
+  {
+    h: "The nine standard document properties",
+    p: "Title, Author, Subject, Keywords, Creator, Producer, Creation date, Modification date and the Trapped flag — each in its own labelled field.",
+  },
+  {
+    h: "Custom properties",
+    p: "Any non-standard keys an application or organisation added to the Info dictionary, such as internal matter numbers or template versions.",
+  },
+  {
+    h: "The XMP packet",
+    p: "If the PDF carries an XMP metadata stream, its raw XML is shown so you can read what the standard properties don't reveal.",
+  },
+  {
+    h: "Computed file details",
+    p: "Page count, file size, the PDF specification version from the file header, and whether the document is encrypted.",
+  },
+];
+
+const identifying = metaFields.filter((f) => f.privacy === "high");
+---
+
+<Layout
+  title="PDF Metadata Viewer — Check What's Inside Any PDF"
+  description="View all PDF metadata online for free: title, author, subject, keywords, creator, producer, dates, custom properties and XMP. Runs entirely in your browser — no uploads."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[howTo, faqSchema(pageFaqs)]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Free tool"
+      title="View the metadata hidden inside any PDF."
+      intro="Find out exactly what a PDF says about its author, the software that made it, and when it was written — before you send it to anyone. The file is read on your device and never uploaded."
+      chips={["Reads every property", "No upload", "No sign-up"]}
+      mesh
+    />
+
+    <MetadataEditor
+      showHeader={false}
+      emphasis="download"
+    />
+
+    <!-- What the viewer shows -->
+    <section class="border-y border-hairline bg-surface py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">What you'll see</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            A complete read of the document, not a summary.
+          </h2>
+          <p class="mt-4 text-body-lg text-body">
+            Most PDF readers show four or five properties. A PDF can carry far more than
+            that, in two separate places.
+          </p>
+        </div>
+
+        <dl class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {
+            viewerShows.map((s) => (
+              <div class="card p-6">
+                <dt class="text-body-md font-semibold text-ink">{s.h}</dt>
+                <dd class="mt-2 text-body-sm text-body">{s.p}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <a
+          href="/pdf-metadata-fields"
+          class="mt-10 inline-flex items-center gap-2 text-body-md font-medium text-link underline decoration-link/30 underline-offset-4 hover:decoration-link"
+        >
+          See what every field means
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Why it matters -->
+    <section class="py-16 sm:py-24">
+      <div class="container-page grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <div>
+          <p class="eyebrow">Why check first</p>
+          <h2 class="mt-2 text-display-md text-ink">
+            The fields that most often identify you.
+          </h2>
+          <p class="mt-4 text-body-md text-body">
+            Metadata is filled in automatically by whatever software produced the file,
+            using whatever name that software was registered with. People are routinely
+            surprised by what a document reveals — a personal full name on an anonymous
+            submission, a timezone that contradicts a stated location, or a modification
+            date proving a file was edited after a deadline.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            Reading the metadata takes a few seconds. Once you know what's there, you can
+            <a href="/edit-pdf-metadata" class="text-link underline decoration-link/30 underline-offset-4 hover:decoration-link">correct individual fields</a>
+            or
+            <a href="/remove-pdf-metadata" class="text-link underline decoration-link/30 underline-offset-4 hover:decoration-link">strip everything at once</a>.
+          </p>
+        </div>
+
+        <ul class="space-y-4">
+          {
+            identifying.map((f) => (
+              <li class="card p-5">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-body-md font-semibold text-ink">{f.label}</span>
+                  <code class="font-mono text-code text-mute">{f.key}</code>
+                </div>
+                <p class="mt-2 text-body-sm text-body">{f.why}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <Faq
+      variant="all"
+      only={["Basics", "Troubleshooting"]}
+      eyebrow="Questions"
+      title="Viewing PDF metadata — questions."
+      moreLink={true}
+    />
+
+    <RelatedPages exclude={[path]} />
+  </main>
+
+  <Footer />
+</Layout>

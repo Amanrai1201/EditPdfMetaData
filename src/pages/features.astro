@@ -1,0 +1,185 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Features from "../components/Features.astro";
+import CtaBand from "../components/CtaBand.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+import { features } from "../data/features";
+import { toolPages } from "../data/nav";
+
+const path = "/features";
+const crumbs = [{ label: "Features", href: path }];
+
+const appSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "PDF Metadata Editor",
+  url: "https://pdfmetadataeditor.com/",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Any (web browser)",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  featureList: features.map((f) => f.title),
+};
+
+const comparison = [
+  {
+    h: "Reads both metadata stores",
+    p: "The Info dictionary and the XMP packet. Tools that only handle the first leave a second copy of your name in the file.",
+  },
+  {
+    h: "A removal flow, not just an editor",
+    p: "Clearing metadata for privacy is a different job from correcting a title. It gets its own one-click action and its own confirmation step.",
+  },
+  {
+    h: "No engine to boot",
+    p: "The page is usable the moment it loads. The PDF library is fetched only when you actually choose a file.",
+  },
+  {
+    h: "A change list before you save",
+    p: "Every pending edit is shown as old → new, so a stray keystroke can't silently end up in your download.",
+  },
+  {
+    h: "Nothing to sign up for",
+    p: "No account, no email, no watermark, no page limit, no daily quota, no paid tier holding a feature hostage.",
+  },
+  {
+    h: "Provable privacy, not promised privacy",
+    p: "There is no upload endpoint to trust. Open DevTools or disconnect your network and confirm it in ten seconds.",
+  },
+];
+
+const limits = [
+  {
+    h: "Encrypted PDFs",
+    p: "Password-protected files can be inspected in many cases, but a file with encrypted content may refuse to re-save. Remove the password first, then edit the metadata.",
+  },
+  {
+    h: "One file at a time",
+    p: "There is no batch queue. You can, however, export one file's metadata as JSON and import it into the next — which covers most repetitive work.",
+  },
+  {
+    h: "Metadata only",
+    p: "This tool does not merge, split, compress, sign, or OCR documents, and it does not edit the visible page content. It does one job thoroughly.",
+  },
+  {
+    h: "Writing XMP field-by-field",
+    p: "XMP packets are shown in full and removed completely, but individual XMP properties aren't editable one at a time. Standard fields cover what most people need to change.",
+  },
+];
+---
+
+<Layout
+  title="Features — PDF Metadata Editor"
+  description="Every feature of the PDF metadata editor: full field coverage, custom properties, XMP support, one-click removal, a change review list, JSON export and import, dark mode, and no uploads."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[appSchema]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Features"
+      title="A metadata tool built to be complete, not to be a demo."
+      intro="Full coverage of both places a PDF stores metadata, a proper removal flow, a review step before you download, and no account standing between you and any of it."
+      chips={["Free", "No sign-up", "Nothing uploaded"]}
+    />
+
+    <Features
+      variant="all"
+      eyebrow="Everything included"
+      title="Nine things this editor does well."
+      intro="No feature here is gated, metered, or reserved for a paid plan."
+      moreLink={false}
+    />
+
+    <!-- Differentiators -->
+    <section class="py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">What sets it apart</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            Where other metadata tools stop short.
+          </h2>
+        </div>
+
+        <dl class="mt-12 grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2">
+          {
+            comparison.map((c) => (
+              <div class="flex gap-4">
+                <svg class="mt-0.5 h-5 w-5 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <div>
+                  <dt class="text-body-md font-semibold text-ink">{c.h}</dt>
+                  <dd class="mt-1.5 text-body-sm text-body">{c.p}</dd>
+                </div>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- Honest limits -->
+    <section class="border-y border-hairline bg-surface py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">Honest limits</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            What it deliberately doesn't do.
+          </h2>
+          <p class="mt-4 text-body-lg text-body">
+            A feature list that only lists strengths isn't much use when you're deciding
+            whether a tool fits your task.
+          </p>
+        </div>
+
+        <dl class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {
+            limits.map((l) => (
+              <div class="card p-6">
+                <dt class="text-body-md font-semibold text-ink">{l.h}</dt>
+                <dd class="mt-2 text-body-sm text-body">{l.p}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- Tool entry points -->
+    <section class="py-16 sm:py-20">
+      <div class="container-page">
+        <h2 class="text-display-md text-ink">Pick the task you're here for.</h2>
+        <ul class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          {
+            toolPages.map((t) => (
+              <li>
+                <a
+                  href={t.href}
+                  class="card group flex h-full flex-col p-6 transition-shadow hover:shadow-float"
+                >
+                  <span class="text-display-sm text-ink">{t.label}</span>
+                  <span class="mt-2 flex-1 text-body-sm text-body">{t.blurb}</span>
+                  <span class="mt-5 inline-flex items-center gap-1.5 text-body-sm font-medium text-link">
+                    Open
+                    <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <CtaBand />
+
+    <RelatedPages exclude={[path]} pool="learn" />
+  </main>
+
+  <Footer />
+</Layout>

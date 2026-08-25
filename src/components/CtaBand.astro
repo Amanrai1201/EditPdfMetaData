@@ -1,0 +1,29 @@
+---
+interface Props {
+  title?: string;
+  body?: string;
+  href?: string;
+  cta?: string;
+}
+const {
+  title = "Try it on your own PDF.",
+  body = "The editor runs in this tab, needs no account, and never uploads your file.",
+  href = "/edit-pdf-metadata",
+  cta = "Open the editor",
+} = Astro.props;
+---
+
+<section class="bg-primary py-14 text-on-primary sm:py-16">
+  <div class="container-page flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 class="text-display-md">{title}</h2>
+      <p class="mt-2 max-w-xl text-body-md text-on-primary/70">{body}</p>
+    </div>
+    <a
+      href={href}
+      class="btn shrink-0 bg-on-primary text-primary hover:opacity-90 text-base h-12 px-6"
+    >
+      {cta}
+    </a>
+  </div>
+</section>

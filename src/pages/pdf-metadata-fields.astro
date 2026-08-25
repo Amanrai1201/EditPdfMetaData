@@ -1,0 +1,129 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import CtaBand from "../components/CtaBand.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+import { metaFields, privacyLabels } from "../data/fields";
+
+const path = "/pdf-metadata-fields";
+const crumbs = [{ label: "Metadata field reference", href: path }];
+
+const article = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "PDF metadata field reference",
+  description:
+    "A reference for every PDF metadata field: Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate, Trapped, custom properties and XMP.",
+  author: { "@type": "Organization", name: "PDF Metadata Editor" },
+  publisher: { "@type": "Organization", name: "PDF Metadata Editor" },
+  mainEntityOfPage: `https://pdfmetadataeditor.com${path}`,
+};
+---
+
+<Layout
+  title="PDF Metadata Fields Explained — Full Reference"
+  description="What every PDF metadata field means: Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate, Trapped, custom properties and the XMP packet — with examples and privacy notes."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[article]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Reference"
+      title="Every PDF metadata field, explained."
+      intro="What each property is for, what it typically contains, and how much it can reveal about you. Use it to decide which fields to correct and which to clear entirely."
+    />
+
+    <!-- Quick index -->
+    <section class="border-b border-hairline bg-surface py-8">
+      <div class="container-page">
+        <p class="eyebrow">Jump to a field</p>
+        <ul class="mt-3 flex flex-wrap gap-2">
+          {
+            metaFields.map((f) => (
+              <li>
+                <a
+                  href={`#${f.label.toLowerCase().replace(/\s+/g, "-")}`}
+                  class="badge transition-colors hover:border-hairline-strong hover:text-ink"
+                >
+                  {f.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- Field entries -->
+    <section class="py-16 sm:py-20">
+      <div class="container-page">
+        <div class="mx-auto max-w-3xl space-y-6">
+          {
+            metaFields.map((f) => {
+              const badge = f.privacy ? privacyLabels[f.privacy] : null;
+              return (
+                <article
+                  id={f.label.toLowerCase().replace(/\s+/g, "-")}
+                  class="card scroll-mt-24 p-6 sm:p-7"
+                >
+                  <div class="flex flex-wrap items-center gap-3">
+                    <h2 class="text-display-sm text-ink">{f.label}</h2>
+                    <code class="font-mono text-code text-mute">{f.key}</code>
+                    {badge && badge.cls && (
+                      <span class={`badge ${badge.cls}`}>{badge.text}</span>
+                    )}
+                  </div>
+
+                  <p class="mt-1 font-mono text-caption text-mute">{f.type}</p>
+
+                  <div class="mt-4 space-y-3">
+                    <p class="text-body-md text-body">{f.what}</p>
+                    <p class="text-body-md text-body">
+                      <span class="font-medium text-ink">Why it matters — </span>
+                      {f.why}
+                    </p>
+                  </div>
+
+                  <div class="mt-5 rounded-md border border-hairline bg-surface-2/50 px-4 py-3">
+                    <p class="eyebrow">Example value</p>
+                    <p class="mt-1.5 font-mono text-code text-ink break-words">{f.example}</p>
+                  </div>
+                </article>
+              );
+            })
+          }
+        </div>
+
+        <div class="mx-auto mt-12 max-w-3xl rounded-lg border border-hairline bg-surface-2/50 p-6">
+          <h2 class="text-body-md font-semibold text-ink">A note on dates</h2>
+          <p class="mt-2 text-body-sm text-body">
+            PDF dates are stored in their own format —
+            <code class="font-mono text-code text-ink">D:YYYYMMDDHHmmSS+HH'mm'</code> — which
+            includes a timezone offset. That offset is metadata in its own right: it can
+            place a document's author in a rough geographic band even when every other
+            field has been cleared. The editor reads and writes these values using your
+            local time, and removes the entry entirely if you clear the field.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <CtaBand
+      title="Check these fields in your own PDF."
+      body="Load a file to see every value it currently carries, then edit or clear what you choose."
+      href="/view-pdf-metadata"
+      cta="Open the viewer"
+    />
+
+    <RelatedPages exclude={[path]} />
+  </main>
+
+  <Footer />
+</Layout>

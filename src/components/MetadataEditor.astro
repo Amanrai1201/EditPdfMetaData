@@ -1,19 +1,43 @@
 ---
 // Client-side PDF metadata editor. All logic runs in the browser <script> below;
 // no server, no upload. pdf-lib is dynamically imported on first file load.
+//
+// The full control set renders on every page — only the framing copy and which
+// action reads as primary change per page, so no page ships a crippled tool.
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+  showHeader?: boolean;
+  /** Which action is visually primary on this page. */
+  emphasis?: "download" | "strip";
+}
+
+const {
+  eyebrow = "The tool",
+  heading = "PDF Metadata Editor",
+  intro = "Drop a PDF to inspect and edit its metadata. Everything runs locally — your file never leaves this page.",
+  showHeader = true,
+  emphasis = "download",
+} = Astro.props;
+
+const stripFirst = emphasis === "strip";
+const downloadClass = stripFirst ? "btn btn-secondary" : "btn btn-primary";
+const stripClass = stripFirst ? "btn btn-danger order-first" : "btn btn-danger";
 ---
 
 <section id="editor" class="scroll-mt-20 py-16 sm:py-24">
   <div class="container-page">
     <div class="mx-auto max-w-4xl">
-      <div class="mb-8 text-center">
-        <p class="eyebrow">The tool</p>
-        <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">PDF Metadata Editor</h2>
-        <p class="mx-auto mt-3 max-w-xl text-body-md text-body">
-          Drop a PDF to inspect and edit its metadata. Everything runs locally — your
-          file never leaves this page.
-        </p>
-      </div>
+      {
+        showHeader && (
+          <div class="mb-8 text-center">
+            <p class="eyebrow">{eyebrow}</p>
+            <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">{heading}</h2>
+            <p class="mx-auto mt-3 max-w-xl text-body-md text-body">{intro}</p>
+          </div>
+        )
+      }
 
       <div class="card overflow-hidden">
         <!-- ───────── DROP STATE ───────── -->
@@ -159,11 +183,11 @@
 
             <!-- Actions -->
             <div class="mt-8 flex flex-col gap-3 border-t border-hairline pt-6 sm:flex-row sm:flex-wrap sm:items-center">
-              <button id="btn-download" type="button" class="btn btn-primary">
+              <button id="btn-download" type="button" class={downloadClass}>
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
                 Download edited PDF
               </button>
-              <button id="btn-strip" type="button" class="btn btn-danger">
+              <button id="btn-strip" type="button" class={stripClass}>
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
                 Remove all metadata
               </button>

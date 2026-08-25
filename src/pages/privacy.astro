@@ -1,20 +1,26 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import RelatedPages from "../components/RelatedPages.astro";
 import Footer from "../components/Footer.astro";
 
+const path = "/privacy";
+const crumbs = [{ label: "Privacy policy", href: path }];
 const updated = "August 25, 2026";
 ---
 
 <Layout
   title="Privacy Policy — PDF Metadata Editor"
   description="PDF Metadata Editor processes your files entirely in your browser. No uploads, no tracking, no cookies, no accounts. Read the full privacy policy."
-  path="/privacy"
+  path={path}
+  breadcrumbs={crumbs}
 >
   <Nav />
+  <Breadcrumbs items={crumbs} />
 
-  <main class="py-16 sm:py-24">
-    <div class="container-page">
+  <main id="main">
+    <div class="container-page py-16 sm:py-24">
       <article class="mx-auto max-w-2xl">
         <p class="eyebrow">Legal</p>
         <h1 class="mt-2 text-display-lg text-ink">Privacy policy</h1>
@@ -119,12 +125,19 @@ const updated = "August 25, 2026";
         <div class="mt-14 rounded-lg border border-hairline bg-surface-2/50 p-6">
           <p class="text-body-md font-medium text-ink">Ready to clean up a PDF?</p>
           <p class="mt-1.5 text-body-sm text-body">
-            The editor is on the home page and works instantly — no sign-up required.
+            The tools work instantly, in this browser, with no sign-up required.
           </p>
-          <a href="/#editor" class="btn btn-primary btn-sm mt-4">Open the editor</a>
+          <div class="mt-4 flex flex-col gap-3 sm:flex-row">
+            <a href="/remove-pdf-metadata" class="btn btn-primary btn-sm"
+              >Remove metadata</a
+            >
+            <a href="/view-pdf-metadata" class="btn btn-secondary btn-sm">View metadata</a>
+          </div>
         </div>
       </article>
     </div>
+
+    <RelatedPages exclude={[path]} title="Read next" />
   </main>
 
   <Footer />

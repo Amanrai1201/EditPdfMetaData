@@ -1,0 +1,245 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import CtaBand from "../components/CtaBand.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+import { faqs, faqSchema } from "../data/faqs";
+
+const path = "/what-is-pdf-metadata";
+const crumbs = [{ label: "What is PDF metadata?", href: path }];
+
+const pageFaqs = faqs.filter((f) => f.cat === "Basics");
+
+const article = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "What is PDF metadata?",
+  description:
+    "A plain-English guide to PDF metadata: what it is, where it is stored, how it gets there, what it can reveal about you, and how to read or remove it.",
+  author: { "@type": "Organization", name: "PDF Metadata Editor" },
+  publisher: { "@type": "Organization", name: "PDF Metadata Editor" },
+  mainEntityOfPage: `https://pdfmetadataeditor.com${path}`,
+};
+
+const toc = [
+  { id: "definition", label: "A simple definition" },
+  { id: "where", label: "Where it lives inside the file" },
+  { id: "how", label: "How it gets there" },
+  { id: "reveals", label: "What it can reveal" },
+  { id: "useful", label: "When it's genuinely useful" },
+  { id: "read", label: "How to read it" },
+  { id: "clean", label: "How to clean it" },
+  { id: "limits", label: "What removal doesn't do" },
+];
+---
+
+<Layout
+  title="What Is PDF Metadata? A Plain-English Guide"
+  description="PDF metadata explained: what it is, where it is stored inside the file, how it gets there, what it can reveal about you, and how to view or remove it safely."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[article, faqSchema(pageFaqs)]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Guide"
+      title="What is PDF metadata?"
+      intro="Every PDF carries a hidden layer of information about itself — who wrote it, what software made it, and when. Here is what that layer contains, why it matters, and what to do about it."
+    />
+
+    <div class="container-page py-16 sm:py-20">
+      <div class="grid grid-cols-1 gap-12 lg:grid-cols-[16rem_1fr]">
+        <!-- Table of contents -->
+        <aside class="lg:sticky lg:top-24 lg:self-start">
+          <p class="eyebrow">On this page</p>
+          <nav aria-label="Table of contents">
+            <ul class="mt-4 space-y-2 border-l border-hairline">
+              {
+                toc.map((t) => (
+                  <li>
+                    <a
+                      href={`#${t.id}`}
+                      class="-ml-px block border-l border-transparent py-1 pl-4 text-body-sm text-body transition-colors hover:border-ink hover:text-ink"
+                    >
+                      {t.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </aside>
+
+        <article class="max-w-2xl">
+          <section id="definition" class="scroll-mt-24">
+            <h2 class="text-display-md text-ink">A simple definition</h2>
+            <p class="mt-4 text-body-md text-body">
+              PDF metadata is information stored inside a PDF that describes the document
+              rather than forming part of what you see on the page. If the pages are the
+              content, the metadata is the label on the box: a title, an author, a
+              subject, some keywords, the name of the software that produced the file, and
+              timestamps for when it was created and last changed.
+            </p>
+            <p class="mt-4 text-body-md text-body">
+              It is not the same thing as the filename. A file called
+              <code class="font-mono text-code text-ink">report-final-v3.pdf</code> can
+              carry the internal title “Q3 Financial Report” and the author “Jane Doe”,
+              and most people never see either.
+            </p>
+          </section>
+
+          <section id="where" class="mt-14 scroll-mt-24">
+            <h2 class="text-display-md text-ink">Where it lives inside the file</h2>
+            <p class="mt-4 text-body-md text-body">
+              There are two places, and this is the single most misunderstood thing about
+              PDF metadata.
+            </p>
+            <div class="mt-6 space-y-4">
+              <div class="card p-5">
+                <h3 class="text-body-md font-semibold text-ink">
+                  1. The document Info dictionary
+                </h3>
+                <p class="mt-2 text-body-sm text-body">
+                  The original mechanism built into the PDF format: a simple list of
+                  key/value pairs such as <code class="font-mono text-code">/Author</code>
+                  and <code class="font-mono text-code">/CreationDate</code>. This is what
+                  a PDF reader shows you under “Document properties”.
+                </p>
+              </div>
+              <div class="card p-5">
+                <h3 class="text-body-md font-semibold text-ink">2. The XMP packet</h3>
+                <p class="mt-2 text-body-sm text-body">
+                  A newer, XML-based standard that can hold much richer information —
+                  including editing history and rights statements. It is often written by
+                  professional publishing software, and it can duplicate or contradict the
+                  Info dictionary.
+                </p>
+              </div>
+            </div>
+            <p class="mt-6 text-body-md text-body">
+              Because the two stores are independent, clearing the properties you can see
+              in a reader does not necessarily clear the XMP data underneath. That is why
+              a thorough cleanup has to address both.
+            </p>
+          </section>
+
+          <section id="how" class="mt-14 scroll-mt-24">
+            <h2 class="text-display-md text-ink">How it gets there</h2>
+            <p class="mt-4 text-body-md text-body">
+              Almost always automatically, and almost never deliberately. When you export
+              a PDF from a word processor, the application fills in the author from your
+              operating system or account profile, sets Creator to itself, sets Producer
+              to whichever engine performed the conversion, and stamps the current time.
+              Nobody types this information — which is precisely why it goes unnoticed.
+            </p>
+            <p class="mt-4 text-body-md text-body">
+              Scanners, phone apps, print-to-PDF drivers, and web-based converters all do
+              the same thing, each leaving its own signature. A file that has passed
+              through several tools can carry traces of every one of them.
+            </p>
+          </section>
+
+          <section id="reveals" class="mt-14 scroll-mt-24">
+            <h2 class="text-display-md text-ink">What it can reveal</h2>
+            <ul class="mt-4 space-y-3">
+              {
+                [
+                  "Your real full name, from an account profile you set up years ago.",
+                  "Your employer or institution, if the software was registered to one.",
+                  "Which applications and versions you run — occasionally including unpatched ones.",
+                  "Your approximate timezone, from the offset stored with each date.",
+                  "That a document was modified after the date it claims, or written in a rush before a deadline.",
+                  "Internal conventions, through custom properties such as matter numbers or template IDs.",
+                ].map((item) => (
+                  <li class="flex gap-3 text-body-md text-body">
+                    <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-hairline-strong" />
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="mt-6 text-body-md text-body">
+              None of this is exotic. It is the default behaviour of ordinary office
+              software, and it has been the source of a long list of accidental
+              disclosures — anonymous documents traced to their authors, and press
+              releases dated before the events they described.
+            </p>
+          </section>
+
+          <section id="useful" class="mt-14 scroll-mt-24">
+            <h2 class="text-display-md text-ink">When it's genuinely useful</h2>
+            <p class="mt-4 text-body-md text-body">
+              Metadata is not something to reflexively delete. Filled in deliberately, it
+              makes documents easier to live with: a proper Title shows in a reader's
+              window instead of a cryptic filename, Keywords make files findable by
+              desktop and enterprise search, and a consistent Author field makes a
+              document set look professionally maintained.
+            </p>
+            <p class="mt-4 text-body-md text-body">
+              The useful distinction is between metadata you chose and metadata that was
+              assigned to you. The first is an asset; the second is a leak.
+            </p>
+          </section>
+
+          <section id="read" class="mt-14 scroll-mt-24">
+            <h2 class="text-display-md text-ink">How to read it</h2>
+            <p class="mt-4 text-body-md text-body">
+              Most PDF readers show a handful of properties in a document-properties
+              dialog, but they typically hide custom entries and the XMP packet entirely.
+              To see everything a file carries, use a tool built for it.
+            </p>
+            <a
+              href="/view-pdf-metadata"
+              class="mt-5 inline-flex items-center gap-2 text-body-md font-medium text-link underline decoration-link/30 underline-offset-4 hover:decoration-link"
+            >
+              Open the metadata viewer
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </section>
+
+          <section id="clean" class="mt-14 scroll-mt-24">
+            <h2 class="text-display-md text-ink">How to clean it</h2>
+            <p class="mt-4 text-body-md text-body">
+              You have two sensible options, depending on your goal. If specific fields are
+              wrong, correct them — this keeps the document useful and searchable. If you
+              want the file to say nothing about its origin, clear everything, including
+              the XMP packet.
+            </p>
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+              <a href="/edit-pdf-metadata" class="btn btn-primary">Edit specific fields</a>
+              <a href="/remove-pdf-metadata" class="btn btn-secondary">Remove everything</a>
+            </div>
+          </section>
+
+          <section id="limits" class="mt-14 scroll-mt-24">
+            <h2 class="text-display-md text-ink">What removal doesn't do</h2>
+            <p class="mt-4 text-body-md text-body">
+              Stripping metadata cleans one specific layer of the file. It does not touch
+              the visible content, so a signature, a letterhead, a path printed in a
+              footer, or an embedded image with its own details can still identify the
+              document's origin. Treat metadata removal as a necessary step in
+              de-identifying a document, not the whole task.
+            </p>
+          </section>
+        </article>
+      </div>
+    </div>
+
+    <CtaBand
+      title="See what your own PDF is carrying."
+      body="Load a file and read every property in a few seconds. Nothing is uploaded."
+      href="/view-pdf-metadata"
+      cta="Open the viewer"
+    />
+
+    <RelatedPages exclude={[path]} />
+  </main>
+
+  <Footer />
+</Layout>

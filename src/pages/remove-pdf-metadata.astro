@@ -1,0 +1,191 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import MetadataEditor from "../components/MetadataEditor.astro";
+import PrivacyBand from "../components/PrivacyBand.astro";
+import Faq from "../components/Faq.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+import { faqs, faqSchema } from "../data/faqs";
+
+const path = "/remove-pdf-metadata";
+const crumbs = [{ label: "Remove PDF metadata", href: path }];
+
+const pageFaqs = faqs.filter((f) => f.cat === "Privacy & security");
+
+const howTo = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to remove metadata from a PDF",
+  totalTime: "PT1M",
+  tool: [{ "@type": "HowToTool", name: "A web browser" }],
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Load your PDF",
+      text: "Drag your PDF onto the tool. It is read locally and never uploaded.",
+      url: "https://pdfmetadataeditor.com/remove-pdf-metadata#editor",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Review what the file contains",
+      text: "Check the properties and XMP packet so you know what is about to be cleared.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Choose Remove all metadata",
+      text: "Confirm the prompt to clear the entire Info dictionary and the XMP metadata stream.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Download the clean copy",
+      text: "A new PDF is downloaded with the metadata removed. Your original file is unchanged.",
+    },
+  ],
+};
+
+const removed = [
+  "Title, Author, Subject and Keywords",
+  "Creator and Producer software names",
+  "Creation and modification dates",
+  "The Trapped print-production flag",
+  "Every custom property in the Info dictionary",
+  "The entire XMP metadata packet",
+];
+
+const scenarios = [
+  {
+    h: "Before publishing on the web",
+    p: "A PDF posted publicly is downloaded, archived and scraped. Any name, internal path or software version inside it is public too, permanently.",
+  },
+  {
+    h: "Before sending work to a client",
+    p: "Producer and Creator strings expose which applications and versions your team runs. Dates can reveal that a deliverable was written the night before it was due.",
+  },
+  {
+    h: "For anonymous or sensitive submissions",
+    p: "Whistleblowing, peer review, tip lines and grievance processes all fall apart if the document names its author in a field nobody thought to check.",
+  },
+  {
+    h: "For records and compliance",
+    p: "Data-minimisation obligations apply to metadata as much as to content. Stripping properties before archiving keeps personal data out of long-term storage.",
+  },
+];
+---
+
+<Layout
+  title="Remove PDF Metadata — Strip Author, Dates & Hidden Data Free"
+  description="Remove all metadata from a PDF in one click: author, title, creator, producer, dates, custom properties and the XMP packet. Runs entirely in your browser — your file is never uploaded."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[howTo, faqSchema(pageFaqs)]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Free tool"
+      title="Remove every trace of metadata from your PDF."
+      intro="One click clears the whole document Info dictionary and the XMP packet — author, dates, software names, custom properties, all of it. The pages themselves are untouched, and your original file is never modified."
+      chips={["Info dictionary + XMP", "One click", "Original file untouched"]}
+      mesh
+    />
+
+    <MetadataEditor showHeader={false} emphasis="strip" />
+
+    <!-- What gets removed -->
+    <section class="border-y border-hairline bg-surface py-16 sm:py-24">
+      <div class="container-page grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <div>
+          <p class="eyebrow">What gets cleared</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            Both copies of the metadata, not just the visible one.
+          </h2>
+          <p class="mt-4 text-body-md text-body">
+            Many tools clear the document properties you can see in a PDF reader and stop
+            there, leaving an XMP packet behind with the same information in XML form. A
+            removal that misses XMP isn't a removal.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            If you'd rather correct individual fields than wipe them,
+            <a
+              href="/edit-pdf-metadata"
+              class="text-link underline decoration-link/30 underline-offset-4 hover:decoration-link"
+              >use the editor instead</a
+            >.
+          </p>
+        </div>
+
+        <ul class="space-y-2.5">
+          {
+            removed.map((r) => (
+              <li class="flex items-center gap-3 rounded-md border border-hairline bg-surface-2/40 px-4 py-3">
+                <svg class="h-4 w-4 shrink-0 text-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                <span class="text-body-sm text-ink">{r}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- When to strip -->
+    <section class="py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">When it matters</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            Four moments worth a ten-second check.
+          </h2>
+        </div>
+
+        <dl class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {
+            scenarios.map((s) => (
+              <div class="card p-6">
+                <dt class="text-body-md font-semibold text-ink">{s.h}</dt>
+                <dd class="mt-2 text-body-sm text-body">{s.p}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <!-- Honest caveat -->
+        <div class="mt-12 rounded-lg border border-warning/40 bg-warning-soft p-6">
+          <div class="flex gap-3">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-warning-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+            <div>
+              <h3 class="text-body-md font-semibold text-warning-deep">
+                Removing metadata is not the same as anonymising a document
+              </h3>
+              <p class="mt-2 text-body-sm text-warning-deep/90">
+                This tool clears the metadata layer completely. It does not change what is
+                printed on the pages. A signature, a letterhead, a filename in a header or
+                footer, an email thread pasted into an appendix, or a photograph's own
+                embedded details can still identify you. If anonymity genuinely matters,
+                remove the metadata <em>and</em> review the visible content page by page.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <PrivacyBand />
+
+    <Faq
+      variant="all"
+      only={["Privacy & security"]}
+      eyebrow="Questions"
+      title="Removing PDF metadata — questions."
+      moreLink={true}
+    />
+
+    <RelatedPages exclude={[path]} />
+  </main>
+
+  <Footer />
+</Layout>
