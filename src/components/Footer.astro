@@ -1,0 +1,53 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-hairline bg-canvas py-14">
+  <div class="container-page">
+    <div class="flex flex-col gap-10 md:flex-row md:justify-between">
+      <div class="max-w-sm">
+        <a href="/" class="flex items-center gap-2.5" aria-label="PDF Metadata Editor home">
+          <img src="/favicon.svg" alt="" width="26" height="26" class="rounded-md" />
+          <span class="text-body-sm font-semibold tracking-tight text-ink">PDF Metadata Editor</span>
+        </a>
+        <p class="mt-4 text-body-sm text-body">
+          A free, private tool to view, edit, and remove metadata from PDF files —
+          entirely in your browser.
+        </p>
+        <p class="mt-4 font-mono text-caption text-mute">pdfmetadataeditor.com</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-10 sm:grid-cols-3">
+        <div>
+          <p class="eyebrow">Tool</p>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="#editor" class="text-body-sm text-body transition-colors hover:text-ink">Metadata editor</a></li>
+            <li><a href="#features" class="text-body-sm text-body transition-colors hover:text-ink">Features</a></li>
+            <li><a href="#how" class="text-body-sm text-body transition-colors hover:text-ink">How it works</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="eyebrow">Learn</p>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="#faq" class="text-body-sm text-body transition-colors hover:text-ink">FAQ</a></li>
+            <li><a href="#privacy" class="text-body-sm text-body transition-colors hover:text-ink">Why it's private</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="eyebrow">Legal</p>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="/privacy" class="text-body-sm text-body transition-colors hover:text-ink">Privacy policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-3 border-t border-hairline pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-caption text-mute">© {year} PDF Metadata Editor. All rights reserved.</p>
+      <p class="flex items-center gap-1.5 text-caption text-mute">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-success"></span>
+        No files uploaded · no tracking · no cookies
+      </p>
+    </div>
+  </div>
+</footer>

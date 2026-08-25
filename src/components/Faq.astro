@@ -1,0 +1,88 @@
+---
+const faqs = [
+  {
+    q: "What is PDF metadata?",
+    a: "PDF metadata is information stored inside a PDF that describes the document rather than forming part of its visible content. It typically includes the title, author, subject, keywords, the application that created the original document (Creator), the software that produced the PDF (Producer), creation and modification dates, and a Trapped flag used in professional printing. PDFs can also carry an XMP packet — an XML block with the same kind of information — and arbitrary custom properties.",
+  },
+  {
+    q: "Why should I edit or remove PDF metadata?",
+    a: "Metadata leaks more than most people expect. A PDF exported from a work laptop can reveal your full name, your employer's software licences, internal file paths, and the exact time you wrote it. Before publishing a document, sending it to a client, submitting it anonymously, or filing it as a record, it's worth checking what's in there. Editing is equally useful in the other direction — accurate titles and authors make documents searchable and look professional in a document management system.",
+  },
+  {
+    q: "Which metadata fields can I edit?",
+    a: "All nine standard document properties: Title, Author, Subject, Keywords, Creator, Producer, Creation date, Modification date, and Trapped. You can also add, edit, and delete unlimited custom key/value properties, and the tool shows you the file's XMP packet plus computed details like page count, file size, PDF version, and whether the document is encrypted.",
+  },
+  {
+    q: "Are my files uploaded to a server?",
+    a: "No. The PDF is read into your browser's memory with the File API, modified by JavaScript running on your machine, and written back out as a local download. There is no upload endpoint in this tool at all. You can confirm it by opening your browser's developer tools, watching the Network tab while you edit a file, or simply disconnecting from the internet — the editor keeps working.",
+  },
+  {
+    q: "Does editing metadata change the document's content?",
+    a: "No. Only the metadata is rewritten. Pages, text, images, fonts, form fields, annotations, and layout are all preserved exactly as they were. The tool also never modifies your original file — it always produces a new copy for you to download.",
+  },
+  {
+    q: "How do I delete just one field instead of all of them?",
+    a: "Clear the input and download the PDF. An empty field is removed from the document's Info dictionary rather than saved as an empty string. To wipe everything at once — including the XMP packet — use the “Remove all metadata” button.",
+  },
+  {
+    q: "What is the Trapped field?",
+    a: "Trapped records whether the document has been through trapping, a prepress process that compensates for slight misregistration between colour plates on a printing press. It accepts three values: True (trapping has been applied), False (it hasn't), and Unknown (unspecified). Outside professional print production it can normally be left unset.",
+  },
+  {
+    q: "Why does my file explorer still show the old metadata?",
+    a: "Windows Explorer, macOS Finder, and most desktop search tools cache document properties in an index that doesn't refresh immediately. The saved PDF itself is correct — open it in a PDF reader and check its document properties to confirm. The cached entry usually updates on its own, or you can rename the file to force a re-index.",
+  },
+  {
+    q: "Can I edit metadata in a password-protected PDF?",
+    a: "Only if the PDF is not encrypted in a way that blocks reading its structure. The tool attempts to read protected files and will tell you if it can't. For fully encrypted documents, remove the password in your PDF reader first, then edit the metadata here.",
+  },
+  {
+    q: "Is there a file size limit?",
+    a: "There's no limit imposed by the tool, because nothing is being uploaded. The practical ceiling is your device's available memory — very large PDFs (hundreds of megabytes) take longer to process and use more RAM, but ordinary documents are essentially instant.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<section id="faq" class="scroll-mt-20 border-t border-hairline bg-surface py-16 sm:py-24">
+  <div class="container-page">
+    <div class="mx-auto max-w-3xl">
+      <div class="text-center">
+        <p class="eyebrow">FAQ</p>
+        <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+          Everything about editing PDF metadata.
+        </h2>
+      </div>
+
+      <div class="mt-12 divide-y divide-hairline border-y border-hairline">
+        {
+          faqs.map((f) => (
+            <details class="group">
+              <summary
+                class="flex cursor-pointer list-none items-start justify-between gap-4 py-5 text-body-md font-medium text-ink"
+              >
+                <span>{f.q}</span>
+                <svg
+                  class="mt-0.5 h-5 w-5 shrink-0 text-mute transition-transform group-open:rotate-45"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"
+                ><path d="M12 5v14M5 12h14"/></svg>
+              </summary>
+              <p class="pb-5 pr-9 text-body-md text-body">{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />

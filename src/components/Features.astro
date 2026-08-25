@@ -1,0 +1,72 @@
+---
+const features = [
+  {
+    title: "See every field, not just a few",
+    body: "The full document Info dictionary — title, author, subject, keywords, creator, producer, both dates and the Trapped flag — plus page count, file size, PDF version and encryption status.",
+    icon: "eye",
+  },
+  {
+    title: "One-click metadata removal",
+    body: "Strip the entire Info dictionary and the XMP packet in a single action. Ideal before sharing a document publicly, filing it, or sending it to a client.",
+    icon: "trash",
+  },
+  {
+    title: "Custom properties",
+    body: "Add, rename, or delete your own key/value pairs — Department, CaseNumber, Version, anything your workflow needs. Existing custom keys are detected automatically.",
+    icon: "tag",
+  },
+  {
+    title: "Review changes before saving",
+    body: "A live change list shows exactly which fields you altered and their old → new values, so you never download a file you didn't mean to modify.",
+    icon: "diff",
+  },
+  {
+    title: "Export & reuse metadata",
+    body: "Download any PDF's metadata as JSON for records or auditing, then import that JSON to apply the same values to another document.",
+    icon: "json",
+  },
+  {
+    title: "Instant — no engine to load",
+    body: "No multi-megabyte WebAssembly runtime to wait on. The page is interactive immediately and the PDF library loads only once you pick a file.",
+    icon: "bolt",
+  },
+];
+
+const icons: Record<string, string> = {
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+  trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+  tag: '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 12V5a2 2 0 0 1 2-2h7a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6z"/><circle cx="7.5" cy="7.5" r="1.2"/>',
+  diff: '<path d="M12 3v18M5 8h14M5 16h14"/>',
+  json: '<path d="M8 3H7a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1M16 3h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-1"/>',
+  bolt: '<path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5z"/>',
+};
+---
+
+<section id="features" class="scroll-mt-20 border-y border-hairline bg-surface py-16 sm:py-24">
+  <div class="container-page">
+    <div class="max-w-2xl">
+      <p class="eyebrow">Features</p>
+      <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+        Everything you need, nothing you don't.
+      </h2>
+      <p class="mt-4 text-body-lg text-body">
+        A focused tool that does one job completely — no account, no watermarks, no
+        upload queue, no daily limit.
+      </p>
+    </div>
+
+    <ul class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        features.map((f) => (
+          <li class="card p-6 transition-shadow hover:shadow-float">
+            <span class="grid h-10 w-10 place-items-center rounded-md bg-surface-2 text-ink">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[f.icon]} />
+            </span>
+            <h3 class="mt-4 text-body-md font-semibold text-ink">{f.title}</h3>
+            <p class="mt-2 text-body-sm text-body">{f.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,131 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+const updated = "August 25, 2026";
+---
+
+<Layout
+  title="Privacy Policy — PDF Metadata Editor"
+  description="PDF Metadata Editor processes your files entirely in your browser. No uploads, no tracking, no cookies, no accounts. Read the full privacy policy."
+  path="/privacy"
+>
+  <Nav />
+
+  <main class="py-16 sm:py-24">
+    <div class="container-page">
+      <article class="mx-auto max-w-2xl">
+        <p class="eyebrow">Legal</p>
+        <h1 class="mt-2 text-display-lg text-ink">Privacy policy</h1>
+        <p class="mt-3 text-body-sm text-mute">Last updated: {updated}</p>
+
+        <div class="mt-10 space-y-10">
+          <section>
+            <h2 class="text-display-sm text-ink">The short version</h2>
+            <p class="mt-3 text-body-md text-body">
+              We don't collect anything. PDF Metadata Editor runs entirely in your web
+              browser. Your PDF files are never uploaded, never stored, and never seen
+              by us — because there is no server component that could receive them.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-display-sm text-ink">How your files are handled</h2>
+            <p class="mt-3 text-body-md text-body">
+              When you select or drop a PDF into the editor, your browser reads it into
+              local memory using the standard File API. All parsing and metadata editing
+              is performed by JavaScript executing on your own device. When you download
+              the result, the new file is generated in memory and handed to your
+              browser's download manager.
+            </p>
+            <p class="mt-3 text-body-md text-body">
+              Your file is discarded from memory when you load a different document,
+              close the tab, or reload the page. Nothing is written to persistent
+              storage, and nothing is transmitted over the network.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-display-sm text-ink">What we don't do</h2>
+            <ul class="mt-3 space-y-2.5">
+              {
+                [
+                  "We do not upload, copy, or retain your documents.",
+                  "We do not use analytics, tracking pixels, session recording, or fingerprinting.",
+                  "We do not set advertising or tracking cookies.",
+                  "We do not require an account, an email address, or any personal information.",
+                  "We do not sell, share, or transfer data to third parties — there is no data to transfer.",
+                ].map((item) => (
+                  <li class="flex gap-3 text-body-md text-body">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="text-display-sm text-ink">Local storage</h2>
+            <p class="mt-3 text-body-md text-body">
+              The site stores exactly one value in your browser's <code class="font-mono text-code text-ink">localStorage</code>:
+              your light or dark theme preference. It is a single key named
+              <code class="font-mono text-code text-ink">theme</code>, it never leaves your device, and clearing your
+              browser data removes it. No cookies are set.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-display-sm text-ink">Hosting and server logs</h2>
+            <p class="mt-3 text-body-md text-body">
+              The site is served as static files by a hosting provider. Like virtually
+              all web hosts, that provider may record standard technical request logs
+              (IP address, timestamp, requested file, user agent) for security and
+              operational purposes. These logs relate to page requests only — your PDF
+              files are never part of any request, so they can never appear in a log.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-display-sm text-ink">Verifying these claims</h2>
+            <p class="mt-3 text-body-md text-body">
+              You don't have to trust this page. Open your browser's developer tools,
+              switch to the Network tab, and edit a PDF — you will see no request
+              carrying your file. For a stronger test, load the page, disconnect from
+              the internet, and use the editor offline. It works, because the processing
+              was always happening locally.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-display-sm text-ink">Children's privacy</h2>
+            <p class="mt-3 text-body-md text-body">
+              The tool collects no personal information from anyone, including children
+              under 13.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-display-sm text-ink">Changes to this policy</h2>
+            <p class="mt-3 text-body-md text-body">
+              If this policy changes, the "last updated" date above will change with it.
+              Any future version that introduced data collection would be announced
+              clearly on this page rather than quietly amended.
+            </p>
+          </section>
+        </div>
+
+        <div class="mt-14 rounded-lg border border-hairline bg-surface-2/50 p-6">
+          <p class="text-body-md font-medium text-ink">Ready to clean up a PDF?</p>
+          <p class="mt-1.5 text-body-sm text-body">
+            The editor is on the home page and works instantly — no sign-up required.
+          </p>
+          <a href="/#editor" class="btn btn-primary btn-sm mt-4">Open the editor</a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
