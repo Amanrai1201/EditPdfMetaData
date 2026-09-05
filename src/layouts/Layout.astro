@@ -13,6 +13,14 @@ interface Props {
   breadcrumbs?: { label: string; href: string }[];
   /** Keep the page out of search results (404 and similar). */
   noindex?: boolean;
+  /** Comma-separated target terms for this page. */
+  keywords?: string;
+  /** og:type — "article" on the guide and reference pages. */
+  ogType?: "website" | "article";
+  /** Override the share card. Path is resolved against the site origin. */
+  image?: string;
+  /** Alt text for the share card. */
+  imageAlt?: string;
 }
 
 const {
@@ -22,16 +30,48 @@ const {
   schema = [],
   breadcrumbs = [],
   noindex = false,
+  keywords = "edit pdf metadata, pdf metadata, pdf metadata editor, view pdf metadata, pdf metadata viewer, remove pdf metadata, pdf metadata remover, change pdf metadata, edit pdf metadata online",
+  ogType = "website",
+  image = "/og-image.png",
+  imageAlt = "EditPdfMetaData — edit PDF metadata online, free. View, edit and remove PDF metadata entirely in your browser.",
 } = Astro.props;
 
-const SITE = "https://pdfmetadataeditor.com";
+const SITE = "https://editpdfmetadata.com";
+const SITE_NAME = "EditPdfMetaData";
 const canonical = new URL(path, SITE).href;
+const ogImage = new URL(image, SITE).href;
+
+// Stable @id anchors so the page-level nodes can reference the site-level ones
+// instead of repeating them.
+const orgId = `${SITE}/#organization`;
+const siteId = `${SITE}/#website`;
+const breadcrumbId = `${canonical}#breadcrumb`;
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": orgId,
+  name: SITE_NAME,
+  url: SITE,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE}/icon-512.png`,
+    width: 512,
+    height: 512,
+  },
+  description:
+    "Free browser-based tools to view, edit, and remove PDF metadata with no uploads and no tracking.",
+};
 
 const siteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "PDF Metadata Editor",
+  "@id": siteId,
+  name: SITE_NAME,
+  alternateName: "PDF Metadata Viewer & Remover",
   url: SITE,
+  inLanguage: "en",
+  publisher: { "@id": orgId },
   description:
     "Free browser-based tool to view, edit, and remove PDF metadata with no uploads.",
 };
@@ -41,6 +81,7 @@ const breadcrumbSchema =
     ? {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
+        "@id": breadcrumbId,
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: SITE },
           ...breadcrumbs.map((b, i) => ({
@@ -53,7 +94,26 @@ const breadcrumbSchema =
       }
     : null;
 
-const blocks = [siteSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : []), ...schema];
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": canonical,
+  url: canonical,
+  name: title,
+  description,
+  inLanguage: "en",
+  isPartOf: { "@id": siteId },
+  primaryImageOfPage: { "@type": "ImageObject", url: ogImage },
+  ...(breadcrumbSchema ? { breadcrumb: { "@id": breadcrumbId } } : {}),
+};
+
+const blocks = [
+  orgSchema,
+  siteSchema,
+  ...(noindex ? [] : [pageSchema]),
+  ...(breadcrumbSchema ? [breadcrumbSchema] : []),
+  ...schema,
+];
 ---
 
 <!doctype html>
@@ -61,28 +121,51 @@ const blocks = [siteSchema, ...(breadcrumbSchema ? [breadcrumbSchema] : []), ...
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta name="application-name" content={SITE_NAME} />
+    <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
+
+    <!-- Primary meta -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content={SITE_NAME} />
     {!noindex && <link rel="canonical" href={canonical} />}
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <meta
       name="robots"
-      content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large"}
+      content={noindex
+        ? "noindex, follow"
+        : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
     />
 
-    <!-- Open Graph / Twitter -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="PDF Metadata Editor" />
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="en" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <!-- No-flash theme init: runs before first paint -->
     <script is:inline>

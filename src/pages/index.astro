@@ -6,6 +6,7 @@ import MetadataEditor from "../components/MetadataEditor.astro";
 import Features from "../components/Features.astro";
 import Steps from "../components/Steps.astro";
 import PrivacyBand from "../components/PrivacyBand.astro";
+import HomeGuide from "../components/HomeGuide.astro";
 import Faq from "../components/Faq.astro";
 import Footer from "../components/Footer.astro";
 import { homeFaqs, faqSchema } from "../data/faqs";
@@ -13,11 +14,17 @@ import { homeFaqs, faqSchema } from "../data/faqs";
 const appSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "PDF Metadata Editor",
-  url: "https://pdfmetadataeditor.com/",
+  "@id": "https://editpdfmetadata.com/#webapp",
+  name: "EditPdfMetaData",
+  alternateName: "Edit PDF Metadata Online",
+  url: "https://editpdfmetadata.com/",
   applicationCategory: "UtilitiesApplication",
+  applicationSubCategory: "PDF metadata editor",
   operatingSystem: "Any (web browser)",
+  browserRequirements: "Requires JavaScript. Works in any modern browser.",
+  isAccessibleForFree: true,
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  publisher: { "@id": "https://editpdfmetadata.com/#organization" },
   description:
     "Free browser-based tool to view, edit, and remove PDF metadata. No uploads, no tracking.",
   featureList: [
@@ -29,21 +36,60 @@ const appSchema = {
     "100% client-side processing",
   ],
 };
+
+const howTo = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to edit PDF metadata online",
+  description:
+    "View, change, or remove the metadata inside a PDF using a browser-based editor, with no upload and no sign-up.",
+  totalTime: "PT2M",
+  tool: [{ "@type": "HowToTool", name: "A web browser" }],
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Open the PDF metadata editor",
+      text: "Load the editor in your browser. It is a static page — there is no upload endpoint and no account to create.",
+      url: "https://editpdfmetadata.com/#editor",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Drop in your PDF",
+      text: "Drag a PDF onto the drop area or browse for it. The file is read into your browser's memory and never sent anywhere.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "View and edit the metadata",
+      text: "Every property appears in an editable form — title, author, subject, keywords, creator, producer, dates and custom fields. Clear a field to delete it.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Download the edited PDF",
+      text: "Save a new copy with your changes applied, or remove all metadata in one click. Your original file is left untouched.",
+    },
+  ],
+};
 ---
 
 <Layout
-  title="PDF Metadata Editor — View, Edit & Remove PDF Metadata Online"
-  description="Free online PDF metadata editor. View, edit, and permanently remove PDF metadata — title, author, subject, keywords, producer and dates — 100% in your browser. No uploads, no tracking, no limits."
+  title="Edit PDF Metadata Online — Free PDF Metadata Editor & Viewer"
+  description="Free PDF metadata editor. View, edit, change, and permanently remove PDF metadata — title, author, subject, keywords, producer and dates — 100% in your browser. No uploads, no sign-up, no limits."
   path="/"
-  schema={[appSchema, faqSchema(homeFaqs)]}
+  keywords="edit pdf metadata, edit pdf metadata online, pdf metadata, pdf metadata editor, view pdf metadata, pdf metadata viewer, remove pdf metadata, pdf metadata remover, change pdf metadata, pdf metadata extraction tools, how to view pdf metadata"
+  schema={[appSchema, howTo, faqSchema(homeFaqs)]}
 >
   <Nav />
   <main id="main">
     <Hero />
-    <MetadataEditor />
+    <MetadataEditor
+      eyebrow="The tool"
+      heading="The PDF metadata editor"
+      intro="Drop a PDF to view and edit its metadata. Everything runs locally — your file never leaves this page."
+    />
     <Features />
     <Steps />
     <PrivacyBand />
+    <HomeGuide />
     <Faq />
   </main>
   <Footer />
