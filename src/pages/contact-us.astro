@@ -1,0 +1,137 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import CtaBand from "../components/CtaBand.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+
+const path = "/contact-us";
+const crumbs = [{ label: "Contact us", href: path }];
+const contactEmail = "support@editpdfmetadata.com";
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://editpdfmetadata.com/contact-us#contact",
+  name: "Contact us",
+  url: "https://editpdfmetadata.com/contact-us",
+  description:
+    "Get in touch with the EditPdfMetaData team about bugs, questions, and feature requests.",
+  mainEntity: {
+    "@type": "Organization",
+    name: "EditPdfMetaData",
+    email: contactEmail,
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: contactEmail,
+      contactType: "customer support",
+      availableLanguage: "English",
+    },
+  },
+};
+---
+
+<Layout
+  title="Contact Us — EditPdfMetaData"
+  description="Contact the EditPdfMetaData team. Ask a question about viewing, editing, or removing PDF metadata, report a bug, or suggest a feature. No account needed."
+  path={path}
+  breadcrumbs={crumbs}
+  schema={[contactSchema]}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="Contact us"
+      title="A real person writes back."
+      intro="No ticket system, no chatbot, no account to create. Email us and we'll respond — usually within a day or two, always with a human answer."
+      chips={["No account needed", "No support tiers", "English"]}
+    />
+
+    <!-- Intro / ways to reach us -->
+    <section class="py-14 sm:py-16">
+      <div class="container-page">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_1fr]">
+          <div class="card p-8">
+            <p class="eyebrow">Email us</p>
+            <h2 class="mt-2 text-display-md text-ink">Every message goes to our inbox.</h2>
+            <p class="mt-3 text-body-md text-body">
+              Whether you're stuck on a file, want a feature, or found something broken —
+              write to us at the address below. Your PDF files stay on your device, so
+              the only thing we see is your message.
+            </p>
+
+            <p class="mt-6">
+              <a
+                href={`mailto:${contactEmail}`}
+                class="inline-flex items-center gap-2.5 rounded-lg border border-hairline bg-surface px-4 py-3 font-mono text-body-sm text-link transition-colors hover:bg-surface-2"
+              >
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                {contactEmail}
+              </a>
+            </p>
+
+            <p class="mt-4 text-body-sm text-mute">
+              A click opens your email app with the address filled in. Prefer your own
+              client? The address is above — copy it and use it directly.
+            </p>
+          </div>
+
+          <div class="card p-8">
+            <p class="eyebrow">Good to know</p>
+            <h2 class="mt-2 text-display-md text-ink">How to get a useful reply.</h2>
+            <p class="mt-3 text-body-sm text-body">
+              Three things make a message much faster to answer:
+            </p>
+            <ul class="mt-4 space-y-2.5">
+              {[
+                "Which tool you were using — the viewer, the editor, or the remover.",
+                "What you expected to happen and what actually did.",
+                "Anything odd about the file — password-protected, signed, or produced by unusual software.",
+              ].map((item) => (
+                <li class="flex gap-3 text-body-sm text-body">
+                  <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-link"></span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What we can't help with -->
+    <section class="border-t border-hairline bg-surface py-14 sm:py-16">
+      <div class="container-page">
+        <div class="mx-auto max-w-2xl">
+          <p class="eyebrow">One honest note</p>
+          <h2 class="mt-2 text-display-md text-ink">We can't see your file — and that's the point.</h2>
+          <p class="mt-3 text-body-md text-body">
+            The tools process everything in your browser, so if something looks wrong, we
+            can't open the document to inspect it. That's the privacy trade this site is
+            built on, and we won't break it by adding a support upload. What we can do is
+            talk you through what the file reports, or ask for the relevant snippet.
+          </p>
+          <p class="mt-3 text-body-md text-body">
+            If you've found a genuine error in the tools, that's the most valuable message
+            we receive. Thanks in advance.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <CtaBand
+      title="Meanwhile, the tools are ready."
+      body="No sign-up, no install — drop a PDF in and see what it says about itself."
+      href="/view-pdf-metadata"
+      cta="Open the viewer"
+    />
+
+    <RelatedPages exclude={[path]} title="Read next" />
+  </main>
+
+  <Footer />
+</Layout>

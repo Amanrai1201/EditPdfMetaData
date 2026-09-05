@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pdfmetadataeditor.com/sitemap.xml
+Sitemap: https://editpdfmetadata.com/sitemap-index.xml

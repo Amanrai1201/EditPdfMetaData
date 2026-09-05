@@ -1,0 +1,158 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHeader from "../components/PageHeader.astro";
+import CtaBand from "../components/CtaBand.astro";
+import RelatedPages from "../components/RelatedPages.astro";
+import Footer from "../components/Footer.astro";
+
+const path = "/about-us";
+const crumbs = [{ label: "About us", href: path }];
+
+const principles = [
+  {
+    n: "01",
+    h: "Your files stay on your device",
+    p: "Every tool here is a static page plus JavaScript. Your PDF is read, parsed, and re-saved inside the browser tab you already have open. There is no upload endpoint, no account, and no file ever stored in our name — the privacy policy spells out exactly what little there is to know.",
+  },
+  {
+    n: "02",
+    h: "A real job, done properly",
+    p: "A PDF can keep two independent copies of its metadata — the Info dictionary a reader shows you, and an XMP packet holding the same details as XML. Most tools clear one and silently leave the other. This one handles both, and the change list shows you exactly what will be written before you download.",
+  },
+  {
+    n: "03",
+    h: "No dark patterns, no premium tier",
+    p: "There are no watermarks, no size caps, no daily quotas, and no future where the useful feature moves behind a paywall. The page loads immediately, the library loads only when you first pick a file, and everything keeps working with your network disconnected.",
+  },
+];
+---
+
+<Layout
+  title="About Us — EditPdfMetaData"
+  description="EditPdfMetaData is a free, browser-only toolset for viewing, editing, and removing PDF metadata. Learn why it exists, what it does, and what it deliberately doesn't do."
+  path={path}
+  breadcrumbs={crumbs}
+>
+  <Nav />
+  <Breadcrumbs items={crumbs} />
+
+  <main id="main">
+    <PageHeader
+      eyebrow="About us"
+      title="Free tools for the layer of a PDF that never shows on the page."
+      intro="EditPdfMetaData exists because the standard way to handle PDF metadata online — upload the file to a stranger's server, wait, download the result — is the wrong trade for a job that needs no server at all. So we built a toolset that runs where your file already is."
+      chips={["No uploads", "No sign-up", "Free forever"]}
+      mesh
+    />
+
+    <!-- Why it exists -->
+    <section class="py-16 sm:py-24">
+      <div class="container-page">
+        <div class="mx-auto max-w-2xl">
+          <p class="eyebrow">Why it exists</p>
+          <h2 class="mt-2 text-display-md text-ink">
+            Reading and writing PDF metadata is a small job.
+          </h2>
+          <p class="mt-4 text-body-md text-body">
+            It touches a dictionary near the end of the file and one optional XML stream.
+            It doesn't require rendering a single page or uploading a single byte. So the
+            sensible implementation is the one that keeps the document on your machine —
+            and the tool that does that isn't just more private, it's faster, has no size
+            limit, and works offline.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            Most of what people need from these tools comes in three shapes: read what's
+            actually in a file, correct the fields that shouldn't be there, or clear the
+            file entirely. We made one dedicated page for each, built on the same editor,
+            so the job you came for is never buried inside a conversion wizard.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What it does / doesn't -->
+    <section class="border-y border-hairline bg-surface py-16 sm:py-24">
+      <div class="container-page">
+        <div class="mx-auto max-w-2xl">
+          <p class="eyebrow">The lines we hold</p>
+          <h2 class="mt-2 text-display-md text-ink">
+            What the toolset does, and what it deliberately doesn't.
+          </h2>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div class="card p-6">
+            <h3 class="text-body-md font-semibold text-ink">It does</h3>
+            <ul class="mt-4 space-y-2.5">
+              {[
+                "View every property a PDF carries — Info dictionary, XMP packet, custom keys, page count, encryption status.",
+                "Edit all nine standard fields plus unlimited custom properties, with a change list before you download.",
+                "Remove all metadata in one click, from both stores, with an honest note about what that does and doesn't cover.",
+                "Export and import metadata as JSON, so a consistent title, author, and keyword set can be applied across a batch of files.",
+              ].map((item) => (
+                <li class="flex gap-3 text-body-sm text-body">
+                  <svg class="mt-0.5 h-5 w-5 shrink-0 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="card p-6">
+            <h3 class="text-body-md font-semibold text-ink">It doesn't</h3>
+            <ul class="mt-4 space-y-2.5">
+              {[
+                "No uploads. There is simply no endpoint here that accepts a document.",
+                "No accounts, no emails, no watermarks, no daily quotas, no size caps.",
+                "No tracking, analytics, session recording, or fingerprinting — the Network tab stays silent.",
+                "No claim that stripping metadata makes a document anonymous. It's a necessary step, not the whole job.",
+              ].map((item) => (
+                <li class="flex gap-3 text-body-sm text-body">
+                  <svg class="mt-0.5 h-5 w-5 shrink-0 text-ink/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Principles -->
+    <section class="py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">Design principles</p>
+          <h2 class="mt-2 text-display-md text-ink">
+            Three rules the whole site is built on.
+          </h2>
+        </div>
+
+        <ol class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {
+            principles.map((p) => (
+              <li class="card p-6">
+                <span class="font-mono text-caption text-mute">{p.n}</span>
+                <h3 class="mt-3 text-body-md font-semibold text-ink">{p.h}</h3>
+                <p class="mt-2 text-body-sm text-body">{p.p}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <CtaBand
+      title="See the toolset for yourself."
+      body="Load a PDF, watch the network stay silent, and keep your document on your own device."
+      href="/view-pdf-metadata"
+      cta="Open the viewer"
+    />
+
+    <RelatedPages exclude={[path]} title="Keep exploring" />
+  </main>
+
+  <Footer />
+</Layout>
