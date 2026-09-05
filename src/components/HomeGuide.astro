@@ -1,0 +1,230 @@
+---
+// Long-form homepage copy. Lives below the tool so the editor stays above the
+// fold, and carries the internal links that point search traffic at the three
+// task pages. Prose sections mirror the article layout on /what-is-pdf-metadata.
+
+const link =
+  "text-link underline decoration-link/30 underline-offset-4 hover:decoration-link";
+
+const toc = [
+  { id: "what-is-pdf-metadata", label: "What PDF metadata is" },
+  { id: "edit-pdf-metadata-online", label: "Edit PDF metadata online" },
+  { id: "how-to-view-pdf-metadata", label: "How to view PDF metadata" },
+  { id: "remove-pdf-metadata", label: "Remove PDF metadata" },
+  { id: "pdf-metadata-extraction-tools", label: "Compared to other tools" },
+  { id: "who-uses-it", label: "Who uses it" },
+];
+---
+
+<section class="border-t border-hairline py-16 sm:py-24" aria-labelledby="guide-heading">
+  <div class="container-page">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[16rem_1fr]">
+      <!-- Table of contents -->
+      <aside class="lg:sticky lg:top-24 lg:self-start">
+        <p class="eyebrow">In this guide</p>
+        <nav aria-label="Guide contents">
+          <ul class="mt-4 space-y-2 border-l border-hairline">
+            {
+              toc.map((t) => (
+                <li>
+                  <a
+                    href={`#${t.id}`}
+                    class="-ml-px block border-l border-transparent py-1 pl-4 text-body-sm text-body transition-colors hover:border-ink hover:text-ink"
+                  >
+                    {t.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </aside>
+
+      <article class="max-w-2xl">
+        <p class="eyebrow">The complete guide</p>
+        <h2 id="guide-heading" class="mt-2 text-display-md text-ink sm:text-display-lg">
+          Edit PDF metadata: what it is, when it matters, and how it works
+        </h2>
+
+        <!-- ── 1 ── -->
+        <section id="what-is-pdf-metadata" class="mt-12 scroll-mt-24">
+          <h3 class="text-display-sm text-ink">
+            What PDF metadata is, and why you'd want to edit it
+          </h3>
+          <p class="mt-4 text-body-md text-body">
+            Every PDF carries a layer of information about itself that never appears on the
+            page. That layer — the PDF metadata — holds a title, an author, a subject, a
+            keyword list, the name of the application that created the original document,
+            the name of the software that produced the PDF, and timestamps for when the file
+            was created and last modified. Almost none of it is typed by a person. When you
+            export a document, your software fills in the author from whatever account the
+            machine was set up with, names itself as Creator, names its conversion engine as
+            Producer, and stamps the current time complete with your timezone offset.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            That's harmless right up to the moment the file leaves your hands. A PDF exported
+            on a work laptop can name a colleague who left two years ago, publish the exact
+            software versions your team runs, and prove that a deliverable was written the
+            night before it was due. Anonymous submissions get traced back to their authors
+            this way with some regularity — not through anything clever, just through a field
+            nobody thought to check.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            The reverse is equally true: metadata you fill in on purpose is genuinely useful.
+            A proper Title is what a PDF reader shows in its window and tab instead of
+            <code class="font-mono text-code text-ink">invoice-final-v3.pdf</code>. Keywords
+            are indexed by desktop search and document management systems, so files surface
+            even when their filenames don't match how people search for them. A consistent
+            Author field makes a document set look maintained rather than assembled. The
+            useful distinction isn't metadata versus no metadata — it's metadata you chose
+            versus metadata that was assigned to you.
+          </p>
+        </section>
+
+        <!-- ── 2 ── -->
+        <section id="edit-pdf-metadata-online" class="mt-14 scroll-mt-24">
+          <h3 class="text-display-sm text-ink">
+            Edit PDF metadata online, with nothing to install
+          </h3>
+          <p class="mt-4 text-body-md text-body">
+            This is a PDF metadata editor that runs as a web page. There's no installer, no
+            account, no email step, no watermark and no daily quota. Drop a file onto the
+            editor and every property it carries appears in an editable form; change what you
+            need and download a new copy. Because you edit PDF metadata online in the browser
+            tab you already have open, the tool behaves the same on Windows, macOS, Linux,
+            Android and iOS — and it keeps working with your network disconnected.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            The part that matters most is what <em>doesn't</em> happen: your PDF is never
+            uploaded. The file is read into your browser's memory with the File API, parsed
+            and rewritten by JavaScript on your own machine, and handed back as a local
+            download. There's no upload endpoint on this site at all — something you can
+            confirm in about ten seconds by opening your browser's developer tools and
+            watching the Network tab stay silent while you work, or by going offline and
+            reloading the page. <a href="/how-it-works" class={link}>How it works</a> walks
+            through the mechanism step by step.
+          </p>
+
+          <h4 class="mt-8 text-body-md font-semibold text-ink">Every field you can change</h4>
+          <p class="mt-3 text-body-md text-body">
+            The editor exposes all nine standard document properties — Title, Author, Subject,
+            Keywords, Creator, Producer, Creation date, Modification date and the Trapped
+            print-production flag — plus unlimited custom key/value properties such as
+            Department, CaseNumber or Version. Clearing an input deletes that entry from the
+            document rather than saving an empty string, so you can change PDF metadata field
+            by field with real precision. A live change list shows each edit as old → new
+            before you download, and you can export any file's metadata as JSON and import it
+            into the next document to apply a consistent title, author and keyword set across
+            a batch of related files. The
+            <a href="/pdf-metadata-fields" class={link}>field reference</a> explains what each
+            property is for and how identifying it is.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            Editing metadata doesn't touch the document itself. Pages, text, fonts, images,
+            form fields, annotations and layout come through exactly as they were, and your
+            original file is never modified — every action produces a new copy to download.
+            Ready to start? <a href="/edit-pdf-metadata" class={link}>Open the PDF metadata
+            editor</a>.
+          </p>
+        </section>
+
+        <!-- ── 3 ── -->
+        <section id="how-to-view-pdf-metadata" class="mt-14 scroll-mt-24">
+          <h3 class="text-display-sm text-ink">How to view PDF metadata before you change it</h3>
+          <p class="mt-4 text-body-md text-body">
+            Before you edit PDF metadata, it's worth reading what's actually in the file. How
+            to view PDF metadata, in three steps: open the
+            <a href="/view-pdf-metadata" class={link}>PDF metadata viewer</a>, drag your PDF
+            onto the drop area, and read the properties that appear. Nothing to configure,
+            nothing to wait for.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            Most PDF readers show four or five properties in a document-properties dialog and
+            hide the rest. A dedicated PDF metadata viewer shows the whole picture: the full
+            Info dictionary, any custom keys an application or organisation added, the raw XMP
+            packet if the file carries one, and computed details like page count, file size,
+            the PDF specification version from the file header, and whether the document is
+            encrypted. Reading all of that takes a few seconds, and it's the only reliable way
+            to know which fields need correcting and which need clearing entirely.
+          </p>
+        </section>
+
+        <!-- ── 4 ── -->
+        <section id="remove-pdf-metadata" class="mt-14 scroll-mt-24">
+          <h3 class="text-display-sm text-ink">
+            Remove PDF metadata when correcting it isn't enough
+          </h3>
+          <p class="mt-4 text-body-md text-body">
+            Sometimes you don't want to edit PDF metadata field by field — you want the file to
+            say nothing about where it came from. The
+            <a href="/remove-pdf-metadata" class={link}>PDF metadata remover</a> clears the
+            entire Info dictionary and the XMP packet in a single action — title, author,
+            subject, keywords, both software names, both dates, the Trapped flag and every
+            custom property.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            That second store is where most tools quietly fail. A PDF can keep two independent
+            copies of its metadata: the Info dictionary a reader shows you, and an XMP packet
+            holding the same details as XML. Clear only the first and a second copy of your
+            name is still sitting in the file. An action that claims to remove PDF metadata
+            but misses XMP hasn't removed it, so this one deletes both.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            One honest caveat. Stripping metadata cleans a single layer of the file, not the
+            whole document. A signature, a letterhead, a path printed in a footer, or an
+            embedded photograph carrying its own details can still identify you. Treat
+            metadata removal as a necessary step in de-identifying a PDF, not the entire job.
+          </p>
+        </section>
+
+        <!-- ── 5 ── -->
+        <section id="pdf-metadata-extraction-tools" class="mt-14 scroll-mt-24">
+          <h3 class="text-display-sm text-ink">
+            Where most PDF metadata extraction tools fall short
+          </h3>
+          <p class="mt-4 text-body-md text-body">
+            Search for PDF metadata extraction tools and you'll mostly find two categories.
+            Command-line utilities are thorough and scriptable, but they assume you're happy
+            installing software and reading a manual page. Web converters are easy, but they
+            ask you to hand a confidential document to a stranger's server — then queue it,
+            watermark it, cap the file size, or keep the one feature you need behind a paid
+            tier.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            This tool takes the third route: the convenience of a web page with the privacy of
+            a local utility. It reads both metadata stores rather than one, gives removal its
+            own flow instead of burying it in a form, shows you a change list before you
+            commit, and doesn't ship a multi-megabyte WebAssembly engine you have to wait on,
+            so the page is interactive the moment it opens. There's no file-size limit either,
+            because nothing is being transferred; the practical ceiling is your own device's
+            memory.
+            <a href="/features" class={link}>See the full feature list</a>, including what the
+            tool deliberately doesn't do.
+          </p>
+        </section>
+
+        <!-- ── 6 ── -->
+        <section id="who-uses-it" class="mt-14 scroll-mt-24">
+          <h3 class="text-display-sm text-ink">Who edits PDF metadata</h3>
+          <p class="mt-4 text-body-md text-body">
+            Lawyers and paralegals sanitising filings and exhibits. Journalists and their
+            sources handling documents that must not name them. Researchers preparing
+            manuscripts for double-blind peer review. Designers and agencies stripping
+            software fingerprints out of a deliverable before it reaches a client. Records
+            teams meeting data-minimisation obligations before a document enters long-term
+            storage. And anyone who has ever spotted a former employer's name on a PDF they
+            were about to publish.
+          </p>
+          <p class="mt-4 text-body-md text-body">
+            All of them need the same two operations — read what's actually in the file, then
+            correct it or clear it — and none of them should have to upload a confidential
+            document to get them. That's the whole reason this editor runs where your file
+            already is. If you're new to any of this,
+            <a href="/what-is-pdf-metadata" class={link}>what is PDF metadata?</a> is the
+            plain-English place to start.
+          </p>
+        </section>
+      </article>
+    </div>
+  </div>
+</section>

@@ -25,7 +25,7 @@ const howTo = {
       "@type": "HowToStep",
       name: "Load your PDF",
       text: "Drag your PDF onto the editor. It is read into your browser's memory and never uploaded.",
-      url: "https://pdfmetadataeditor.com/edit-pdf-metadata#editor",
+      url: "https://editpdfmetadata.com/edit-pdf-metadata#editor",
     },
     {
       "@type": "HowToStep",
@@ -71,12 +71,36 @@ const tasks = [
     p: "Export one document's metadata as JSON, then import it into the next PDF to reuse the same title, author and keyword set.",
   },
 ];
+
+const editSteps = [
+  {
+    n: "01",
+    h: "Load your PDF",
+    p: "Drag it onto the editor above. The file is read into your browser's memory and never uploaded.",
+  },
+  {
+    n: "02",
+    h: "Change the fields",
+    p: "Edit the title, author, subject, keywords, creator, producer and dates. Clear a field to delete it, or add your own custom properties.",
+  },
+  {
+    n: "03",
+    h: "Review your changes",
+    p: "The pending-changes list shows every field you touched, with its old and new value side by side.",
+  },
+  {
+    n: "04",
+    h: "Download the edited PDF",
+    p: "Save a new copy with your metadata applied. The original file on disk is left byte-for-byte untouched.",
+  },
+];
 ---
 
 <Layout
   title="Edit PDF Metadata Online — Change Title, Author & Dates"
   description="Edit PDF metadata free in your browser. Change the title, author, subject, keywords, creator, producer and dates, add custom properties, then download a new copy. No uploads, no sign-up."
   path={path}
+  keywords="edit pdf metadata, edit pdf metadata online, change pdf metadata, pdf metadata editor, pdf metadata, edit pdf title and author, pdf metadata extraction tools"
   breadcrumbs={crumbs}
   schema={[howTo, faqSchema(pageFaqs)]}
 >
@@ -87,15 +111,44 @@ const tasks = [
     <PageHeader
       eyebrow="Free tool"
       title="Edit PDF metadata without re-exporting the document."
-      intro="Correct the author, set a proper title, fix the dates, add keywords, or record your own custom properties — then download a new copy. Your pages, text and layout are left exactly as they were."
+      intro="A free PDF metadata editor that runs in your browser. Correct the author, set a proper title, fix the dates, add keywords, or record your own custom properties — then download a new copy. Your pages, text and layout are left exactly as they were."
       chips={["All nine standard fields", "Custom properties", "Change review before saving"]}
       mesh
     />
 
     <MetadataEditor showHeader={false} emphasis="download" />
 
-    <!-- Common tasks -->
+    <!-- How to edit PDF metadata — visible counterpart to the HowTo schema -->
     <section class="border-y border-hairline bg-surface py-16 sm:py-24">
+      <div class="container-page">
+        <div class="max-w-2xl">
+          <p class="eyebrow">Step by step</p>
+          <h2 class="mt-2 text-display-md text-ink sm:text-display-lg">
+            How to edit PDF metadata in four steps
+          </h2>
+          <p class="mt-4 text-body-lg text-body">
+            Under two minutes, no account, and nothing to install.
+          </p>
+        </div>
+
+        <ol class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            editSteps.map((s) => (
+              <li>
+                <span class="font-mono text-caption text-mute">{s.n}</span>
+                <div class="mt-3 border-t-2 border-hairline pt-4">
+                  <h3 class="text-display-sm text-ink">{s.h}</h3>
+                  <p class="mt-2 text-body-sm text-body">{s.p}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Common tasks -->
+    <section class="border-b border-hairline py-16 sm:py-24">
       <div class="container-page">
         <div class="max-w-2xl">
           <p class="eyebrow">Common edits</p>
